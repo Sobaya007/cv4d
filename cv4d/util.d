@@ -206,7 +206,7 @@ void levelCorrection(Image img, int low=0, int high=255)
 	}
 	
 	img.applyLUT(lut);
-	delete lut;
+    lut.destroy();
 }
 
 
@@ -272,7 +272,7 @@ void toneCurve(alias curvefunc)(Image img)
 void glowEffect(Image img)
 {
 	auto tmp = new Image(img);
-	scope (exit) delete tmp;
+	scope (exit) tmp.destroy();
 	levelCorrection(tmp, 224, 256);
 	tmp.smooth(CV_GAUSSIAN, 0, 0, 10, 0);
 	static ubyte brendfunc(int d, int s, int a = 255)

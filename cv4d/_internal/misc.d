@@ -38,8 +38,8 @@ private
 		alias core.stdc.wchar_.mbsrtowcs mbsrtowcs;
 		alias core.stdc.wchar_.wcsrtombs wcsrtombs;
 		import core.sync.mutex;
-		import tango.text.convert.Utf;
-		alias tango.text.convert.Utf.toString32 toString32;
+        import std.utf;
+        alias toString32 = toUTF32;
 	}
 }
 
@@ -52,7 +52,7 @@ version (Windows) {} else
 	}
 	static ~this()
 	{
-		delete g_LocaleMutex;
+		g_LocaleMutex.destroy();
 	}
 	private struct LocaleHandle
 	{
@@ -81,7 +81,7 @@ version (Windows) {} else
 		scope (exit)
 		{
 			hnd.mutex.unlock;
-			delete hnd;
+            hnd.destroy();
 		}
 		setlocale(hnd.category, hnd.oldloc);
 	}
